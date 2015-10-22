@@ -25,9 +25,9 @@
 #include <tuple>
 #include <vector>
 
+#include "AI.h"
 #include "Board.h"
 #include "customIO.h"
-#include "Player.h"
 #include "Ship.h"
 #include "Tile.h"
 #include "ui.h"
@@ -84,11 +84,46 @@ int main() {
 	{
 		vector<char> avitars = {'@', '#', '$', '%', '&', '~'};
 		vector<Player*> tmpPlayers;
-		uint numPlayers = getUserMenu("How Many Players", 6);
-		for(; numPlayers > 0; numPlayers--) { // get new players
+		uint numHumanPlayers, numAIPlayers;
+		clear();
+		for(;;) { // we break out
+			numHumanPlayers = getUserUInt("How Many Human Players");
+			numAIPlayers = 0;
+			if(numHumanPlayers + numAIPlayers > 6) {
+				clear();
+				cout << "There may be no mode than 6 total players." << endl;
+				continue;
+			}
+
+			if(numHumanPlayers < 6) {
+				numAIPlayers = getUserUInt("How Many AI Players");
+			} // else we are out of avitars
+			if(numHumanPlayers + numAIPlayers > 6) {
+				clear();
+				cout << "There may be no mode than 6 total players." << endl;
+				continue;
+			} else if(numHumanPlayers + numAIPlayers <= 0) {
+				clear();
+				cout << "There must be at least 1 player." << endl;
+				continue;
+			} else {
+				break;
+			}
+		}
+
+		for(uint numHumanPlayer = 0; numHumanPlayer < numHumanPlayers; numHumanPlayer++) { // get new players
 			clear();
 			tmpPlayers.push_back(new Player(&avitars, 4000));
 		}
+		if(numAIPlayers > 0) {
+			clear();
+			for(uint numAIPlayer = 0; numAIPlayer < numAIPlayers; numAIPlayer++) { // get new players
+				tmpPlayers.push_back(new AI(&avitars, 4000));
+			}
+			waitForUser();
+		}
+
+
 		while(tmpPlayers.size()) { // while we have players
 			uint index = rand() % tmpPlayers.size(); // pick a random player
 			players.push_back(tmpPlayers.at(index)); // push him on the end
@@ -112,14 +147,14 @@ int main() {
 		do {
 			// world
 			board.shiftMarket(); // shift global economy
-			for(vector<Tile*>::iterator planit = planits.begin() + 1; planit < planits.end(); planit++) { // shift planit economy
+			for(vector<Tile*>::iterator planit = planits.begin(); planit < planits.end(); planit++) { // shift planit economy
 				(*planit)->shiftMarket();
 				(*planit)->manageInventory();
 			}
 
 			// turn
 			Player* player = (*playerIterator);
-			if(players.size() > 1) { // banner when switching players
+			if(players.size() > 1 && !dynamic_cast<AI*>(player)) { // banner when switching players and not AI
 				clear();
 				cout << " /$$$$$$$                                          /$$   /$$              " << endl;
 				cout << "| $$__  $$                                        |__/  | $$              " << endl;
@@ -210,10 +245,10 @@ int main() {
 		// victors
 		clear();
 		sort(players.begin(), players.end(), [](Player* a, Player* b) -> bool {
-			return a->getMoney() < b->getMoney();
+			return a->getMoney() > b->getMoney();
 		});
 		for(vector<Player*>::iterator player = players.begin(); player < players.end(); player++) {
-			uint rank = distance(players.begin(), player);
+			uint rank = distance(players.begin(), player) + 1;
 			cout << rank << ": " << (*player)->getName() << " (" << (*player)->getChar() << ") " << (*player)->getMoney() << "cr" << endl;
 		}
 

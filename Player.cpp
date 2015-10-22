@@ -37,6 +37,8 @@ using namespace std;
 using namespace ui;
 using namespace customIO;
 
+Player::Player() {}
+Player::~Player() {}
 Player::Player(vector<char>* avalibleAvitars, uint startingMoney) {
 	name = getUserString("Name");
 	vector<string> menuOptions;
@@ -171,6 +173,7 @@ void Player::takeTurn(Board* board, vector<Player*> players) {
 					case 3: price = get<3>(tile->getMarkupPrices(board->getPrices())); break;
 					case 4: price = get<4>(tile->getMarkupPrices(board->getPrices())); break;
 				}
+				price *= amount;
 				if(price <= getMoney()) {
 					if(getShip()->changeResource(resource, amount)) {
 						transaction(-price);
@@ -201,6 +204,7 @@ void Player::takeTurn(Board* board, vector<Player*> players) {
 					case 3: price = get<3>(tile->getPrices(board->getPrices())); break;
 					case 4: price = get<4>(tile->getPrices(board->getPrices())); break;
 				}
+				price *= amount;
 				if(getShip()->changeResource(resource, -amount)) {
 					transaction(price);
 					clear();
@@ -280,5 +284,5 @@ void Player::takeTurn(Board* board, vector<Player*> players) {
 				waitForUser();
 			} break;
 		}
-	};
+	}
 }

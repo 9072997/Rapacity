@@ -18,6 +18,7 @@
 
 #include "Tile.h"
 
+#include <algorithm> /* max */
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
@@ -25,7 +26,6 @@
 #include <string>
 #include <tuple>
 #include <vector>
-#include <algorithm> /* max */
 
 #include "Player.h"
 #include "Ship.h"
@@ -42,11 +42,11 @@ Tile::Tile(string newName, char newAvitar, bool isPrimitive) {
 		get<3>(marketMul) = float(1000 + rand()%201) / 1000; // munitions
 		get<4>(marketMul) = float(1900 + rand()%201) / 1000; // fuel
 
-		get<0>(markup) = float(9900 + rand()%201) / 1000; // uranium
-		get<1>(markup) = float(1400 + rand()%201) / 1000; // gold
-		get<2>(markup) = float(1000 + rand()%201) / 1000; // ore
-		get<3>(markup) = float(1000 + rand()%201) / 1000; // munitions
-		get<4>(markup) = float(1700 + rand()%201) / 1000; // fuel
+		get<0>(markup) = float(9900 + rand()%101) / 1000; // uranium
+		get<1>(markup) = float(1400 + rand()%101) / 1000; // gold
+		get<2>(markup) = float(1000 + rand()%101) / 1000; // ore
+		get<3>(markup) = float(1000 + rand()%101) / 1000; // munitions
+		get<4>(markup) = float(1700 + rand()%101) / 1000; // fuel
 
 		numShips = 2;
 	} else {
@@ -56,11 +56,11 @@ Tile::Tile(string newName, char newAvitar, bool isPrimitive) {
 		get<3>(marketMul) = float(900 + rand()%201) / 1000; // munitions
 		get<4>(marketMul) = float(900 + rand()%201) / 1000; // fuel
 
-		get<0>(markup) = float(1000 + rand()%201) / 1000; // uranium
-		get<1>(markup) = float(1400 + rand()%201) / 1000; // gold
-		get<2>(markup) = float(1900 + rand()%201) / 1000; // ore
-		get<3>(markup) = float(2900 + rand()%201) / 1000; // munitions
-		get<4>(markup) = float(1000 + rand()%201) / 1000; // fuel
+		get<0>(markup) = float(1000 + rand()%101) / 1000; // uranium
+		get<1>(markup) = float(1400 + rand()%101) / 1000; // gold
+		get<2>(markup) = float(1900 + rand()%101) / 1000; // ore
+		get<3>(markup) = float(2900 + rand()%101) / 1000; // munitions
+		get<4>(markup) = float(1000 + rand()%101) / 1000; // fuel
 
 		numShips = 4;
 	}
@@ -85,11 +85,11 @@ void Tile::shiftMarket() {
 	get<3>(marketMul) = positiveSum(get<3>(marketMul), float(10 - rand()%21)/1000); // munitions
 	get<4>(marketMul) = positiveSum(get<4>(marketMul), float(10 - rand()%21)/1000); // fuel
 
-	get<0>(markup) += max(float(10 - rand()%21)/1000, float(1)); // uranium
-	get<1>(markup) += max(float(10 - rand()%21)/1000, float(1)); // gold
-	get<2>(markup) += max(float(10 - rand()%21)/1000, float(1)); // ore
-	get<3>(markup) += max(float(10 - rand()%21)/1000, float(1)); // munitions
-	get<4>(markup) += max(float(10 - rand()%21)/1000, float(1)); // fuel
+	get<0>(markup) = max(get<0>(markup) + float(10 - rand()%21)/1000, float(1)); // uranium
+	get<1>(markup) = max(get<1>(markup) + float(10 - rand()%21)/1000, float(1)); // gold
+	get<2>(markup) = max(get<2>(markup) + float(10 - rand()%21)/1000, float(1)); // ore
+	get<3>(markup) = max(get<3>(markup) + float(10 - rand()%21)/1000, float(1)); // munitions
+	get<4>(markup) = max(get<4>(markup) + float(10 - rand()%21)/1000, float(1)); // fuel
 }
 
 string Tile::getName() {
@@ -107,11 +107,11 @@ tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int> Tile
 }
 tuple<unsigned int, unsigned int, unsigned int, unsigned int, unsigned int> Tile::getMarkupPrices(prices_t prices) {
 	return make_tuple(
-			(uint)ceil(get<0>(prices) * get<0>(marketMul)* get<0>(markup)),
-			(uint)ceil(get<1>(prices) * get<1>(marketMul)* get<1>(markup)),
-			(uint)ceil(get<2>(prices) * get<2>(marketMul)* get<2>(markup)),
-			(uint)ceil(get<3>(prices) * get<3>(marketMul)* get<3>(markup)),
-			(uint)ceil(get<4>(prices) * get<4>(marketMul)* get<4>(markup))
+			(uint)ceil(get<0>(prices) * get<0>(marketMul) * get<0>(markup)),
+			(uint)ceil(get<1>(prices) * get<1>(marketMul) * get<1>(markup)),
+			(uint)ceil(get<2>(prices) * get<2>(marketMul) * get<2>(markup)),
+			(uint)ceil(get<3>(prices) * get<3>(marketMul) * get<3>(markup)),
+			(uint)ceil(get<4>(prices) * get<4>(marketMul) * get<4>(markup))
 	);
 }
 Player* Tile::getWanted() {

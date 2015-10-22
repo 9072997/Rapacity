@@ -35,10 +35,11 @@ class Player {
 		std::string name;
 		Ship* ship;
 	public:
-		Player(std::string name, char avitar, uint money);
+		Player();
+		virtual ~Player();
 		Player(std::vector<char>* avalibleAvitars, uint money);
 		uint getPosition();
-		void takeTurn(Board* board, std::vector<Player*>);
+		virtual void takeTurn(Board* board, std::vector<Player*>);
 		char getChar();
 		std::string getName();
 		uint getMoney();

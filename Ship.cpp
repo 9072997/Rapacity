@@ -72,35 +72,35 @@ unsigned int Ship::amtStuff() {
 bool Ship::changeResource(uint resource, int by) {
 	switch(resource) {
 		case 0:
-			if(amtStuff() + by <= getSize() && get<0>(resources) + by >= 0) {
+			if(amtStuff() + by <= getSize() && int(get<0>(resources)) + by >= 0) {
 				get<0>(resources) += by;
 				return true;
 			} else {
 				return false;
 			}
 		case 1:
-			if(amtStuff() + by <= getSize() && get<1>(resources) + by >= 0) {
+			if(amtStuff() + by <= getSize() && int(get<1>(resources)) + by >= 0) {
 				get<1>(resources) += by;
 				return true;
 			} else {
 				return false;
 			}
 		case 2:
-			if(amtStuff() + by <= getSize() && get<2>(resources) + by >= 0) {
+			if(amtStuff() + by <= getSize() && int(get<2>(resources)) + by >= 0) {
 				get<2>(resources) += by;
 				return true;
 			} else {
 				return false;
 			}
 		case 3:
-			if(amtStuff() + by <= getSize() && get<3>(resources) + by >= 0) {
+			if(amtStuff() + by <= getSize() && int(get<3>(resources)) + by >= 0) {
 				get<3>(resources) += by;
 				return true;
 			} else {
 				return false;
 			}
 		case 4:
-			if(fuel + by <= getRange() && fuel + by >= 0) {
+			if(fuel + by <= getRange() && int(fuel) + by >= 0) {
 				fuel += by;
 				return true;
 			} else {
